@@ -7,3 +7,6 @@ digest.log
 state.json
 history/
 dashboard.log
+.DS_Store
+__pycache__/
+.pytest_cache/
