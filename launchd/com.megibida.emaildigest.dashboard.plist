@@ -7,7 +7,7 @@
     <!-- The dashboard at http://localhost:8765, started at login and restarted if it crashes. -->
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/megibida/f1_races/email_digest/.venv/bin/uvicorn</string>
+        <string>/Users/megibida/email_digest/.venv/bin/uvicorn</string>
         <string>app:app</string>
         <string>--host</string>
         <string>127.0.0.1</string>
@@ -15,14 +15,14 @@
         <string>8765</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/megibida/f1_races/email_digest</string>
+    <string>/Users/megibida/email_digest</string>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
     <true/>
     <key>StandardOutPath</key>
-    <string>/Users/megibida/f1_races/email_digest/dashboard.log</string>
+    <string>/Users/megibida/email_digest/dashboard.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/megibida/f1_races/email_digest/dashboard.log</string>
+    <string>/Users/megibida/email_digest/dashboard.log</string>
 </dict>
 </plist>

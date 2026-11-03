@@ -6,11 +6,11 @@
     <string>com.megibida.emaildigest.schedule</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/megibida/f1_races/email_digest/.venv/bin/python</string>
-        <string>/Users/megibida/f1_races/email_digest/digest.py</string>
+        <string>/Users/megibida/email_digest/.venv/bin/python</string>
+        <string>/Users/megibida/email_digest/digest.py</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/megibida/f1_races/email_digest</string>
+    <string>/Users/megibida/email_digest</string>
     <!-- 8:00 and 19:00. If the Mac is asleep then, launchd runs the job when it wakes. -->
     <key>StartCalendarInterval</key>
     <array>
@@ -18,8 +18,8 @@
         <dict><key>Hour</key><integer>19</integer><key>Minute</key><integer>0</integer></dict>
     </array>
     <key>StandardOutPath</key>
-    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+    <string>/Users/megibida/email_digest/digest.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+    <string>/Users/megibida/email_digest/digest.log</string>
 </dict>
 </plist>

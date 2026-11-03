@@ -1,3 +1,8 @@
+import warnings
+
+# Old-Python deprecation notices from the Google libraries would otherwise land in the log every 2 minutes.
+warnings.filterwarnings("ignore")
+
 import argparse
 import json
 import os

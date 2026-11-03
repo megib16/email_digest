@@ -9,20 +9,20 @@
          That is what fires when you open the lid or log in after a gap. -->
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/megibida/f1_races/email_digest/.venv/bin/python</string>
-        <string>/Users/megibida/f1_races/email_digest/digest.py</string>
+        <string>/Users/megibida/email_digest/.venv/bin/python</string>
+        <string>/Users/megibida/email_digest/digest.py</string>
         <string>--when-active</string>
         <string>2</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/megibida/f1_races/email_digest</string>
+    <string>/Users/megibida/email_digest</string>
     <key>StartInterval</key>
     <integer>120</integer>
     <key>RunAtLoad</key>
     <true/>
     <key>StandardOutPath</key>
-    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+    <string>/Users/megibida/email_digest/digest.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+    <string>/Users/megibida/email_digest/digest.log</string>
 </dict>
 </plist>
