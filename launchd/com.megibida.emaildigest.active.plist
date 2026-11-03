@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.megibida.emaildigest.active</string>
+    <!-- Every 2 minutes this does a cheap check. It only runs a real digest when you are at the
+         Mac (used the keyboard/mouse in the last 2 minutes) and no digest ran in the last 2 hours.
+         That is what fires when you open the lid or log in after a gap. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/megibida/f1_races/email_digest/.venv/bin/python</string>
+        <string>/Users/megibida/f1_races/email_digest/digest.py</string>
+        <string>--when-active</string>
+        <string>2</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/megibida/f1_races/email_digest</string>
+    <key>StartInterval</key>
+    <integer>120</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+</dict>
+</plist>

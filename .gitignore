@@ -1,0 +1,9 @@
+.venv/
+.env
+credentials.json
+token.json
+latest_digest.txt
+digest.log
+state.json
+history/
+dashboard.log

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.megibida.emaildigest.schedule</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/megibida/f1_races/email_digest/.venv/bin/python</string>
+        <string>/Users/megibida/f1_races/email_digest/digest.py</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/megibida/f1_races/email_digest</string>
+    <!-- 8:00 and 19:00. If the Mac is asleep then, launchd runs the job when it wakes. -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>0</integer></dict>
+        <dict><key>Hour</key><integer>19</integer><key>Minute</key><integer>0</integer></dict>
+    </array>
+    <key>StandardOutPath</key>
+    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/megibida/f1_races/email_digest/digest.log</string>
+</dict>
+</plist>

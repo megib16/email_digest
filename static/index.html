@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email digest</title>
+<style>
+  :root {
+    --bg: #f3f4f8; --card: #ffffff; --text: #181a20; --muted: #6a6f7d; --line: #e6e8ee;
+    --accent: #4f46e5; --accent-soft: #eef0ff; --accent-text: #ffffff;
+    --reply: #c2410c; --reply-soft: #fff1e8; --wait: #0f766e; --wait-soft: #e6f6f4;
+    --shadow: 0 1px 2px rgba(20,24,40,.05), 0 4px 14px rgba(20,24,40,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1116; --card: #181b22; --text: #eceef4; --muted: #8e94a3; --line: #272b35;
+      --accent: #8b87ff; --accent-soft: #232547; --accent-text: #0f1116;
+      --reply: #fb923c; --reply-soft: #2c1d12; --wait: #2dd4bf; --wait-soft: #11292a;
+      --shadow: 0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
+  main { max-width: 740px; margin: 0 auto; padding: 28px 16px 72px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo { width: 40px; height: 40px; border-radius: 12px; background: var(--accent); color: var(--accent-text);
+          display: grid; place-items: center; font-size: 20px; }
+  h1 { font-size: 20px; margin: 0; letter-spacing: -.01em; }
+  .sub { color: var(--muted); font-size: 13px; }
+  button { font: inherit; font-weight: 600; font-size: 14px; border-radius: 10px; border: 1px solid var(--line);
+           background: var(--card); color: var(--text); padding: 8px 14px; cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  button.primary:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .55; cursor: default; }
+  #msg { margin-top: 12px; color: var(--muted); font-size: 14px; }
+
+  .hero { margin-top: 24px; padding: 20px 22px; border-radius: 16px; background: var(--accent); color: var(--accent-text); box-shadow: var(--shadow); }
+  .hero .label { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
+  .hero .big { font-size: 24px; font-weight: 700; letter-spacing: -.02em; margin-top: 4px; }
+
+  h2 { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 34px 0 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+          margin-bottom: 10px; box-shadow: var(--shadow); }
+  .empty { color: var(--muted); padding: 6px 2px; }
+
+  .row { display: flex; gap: 14px; align-items: flex-start; }
+  .grow { flex: 1; min-width: 0; }
+  .avatar { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+            color: #fff; font-weight: 700; font-size: 15px; }
+  .avatar.square { border-radius: 10px; }
+  .name { font-weight: 650; }
+  .topic { color: var(--muted); }
+  .summary { margin: 6px 0 0; }
+  .note { margin-top: 10px; padding: 8px 12px; border-radius: 10px; background: var(--accent-soft); font-size: 14px; }
+  .note::before { content: "→ "; font-weight: 700; color: var(--accent); }
+  .pill { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 2px 8px; border-radius: 99px;
+          background: var(--accent-soft); color: var(--accent); margin-left: 6px; vertical-align: 1px; }
+  .pill.reply { background: var(--reply-soft); color: var(--reply); }
+  .pill.wait { background: var(--wait-soft); color: var(--wait); }
+  .pill.todo { background: var(--wait-soft); color: var(--wait); }
+  ul.mini { margin: 8px 0 0; padding: 0; list-style: none; }
+  ul.mini li { padding: 6px 0; border-top: 1px solid var(--line); }
+  ul.mini li:first-child { border-top: 0; }
+  .skipped { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+  .item { border-left: 4px solid var(--reply); }
+  .item.wait { border-left-color: var(--wait); }
+
+  .dig-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .sec { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin: 18px 0 8px; }
+  details { margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 10px 14px; background: var(--card); border: 1px solid var(--line);
+            border-radius: 12px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary .sub { font-weight: 400; }
+  details[open] summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  details .body { border: 1px solid var(--line); border-top: 0; border-radius: 0 0 12px 12px; padding: 4px 14px 14px; background: var(--card); }
+  pre { white-space: pre-wrap; word-wrap: break-word; font: inherit; margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand">
+      <div class="logo">✉</div>
+      <div>
+        <h1>Email digest</h1>
+        <div class="sub" id="lastrun">&nbsp;</div>
+      </div>
+    </div>
+    <button class="primary" id="run">Check now</button>
+  </header>
+  <div id="msg" role="status"></div>
+
+  <div class="hero" id="hero" hidden>
+    <div class="label" id="hero-label"></div>
+    <div class="big" id="hero-big"></div>
+  </div>
+
+  <h2>Open items</h2>
+  <div id="items"></div>
+
+  <h2>Latest digest</h2>
+  <div id="latest"></div>
+
+  <h2>Earlier</h2>
+  <div id="history"></div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+function el(tag, props = {}, ...children) {
+  const node = Object.assign(document.createElement(tag), props);
+  node.append(...children);
+  return node;
+}
+
+function ago(ts) {
+  const days = Math.floor((Date.now() / 1000 - ts) / 86400);
+  return days <= 0 ? "today" : days === 1 ? "yesterday" : `${days} days ago`;
+}
+
+const MODES = { morning: ["☀️", "Morning digest"], evening: ["🌙", "Evening digest"], update: ["📬", "New mail"] };
+
+function prettyWhen(when) {            // "2026-10-30_1900" -> "30 Oct, 19:00"
+  const [d, t] = when.split("_");
+  const date = new Date(`${d}T${t.slice(0, 2)}:${t.slice(2)}:00`);
+  return date.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+function avatar(name, square = false) {
+  let h = 0;
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) % 360;
+  const a = el("div", { className: "avatar" + (square ? " square" : ""), textContent: (name.trim()[0] || "?").toUpperCase() });
+  a.style.background = `hsl(${h} 50% 42%)`;
+  return a;
+}
+
+const note = (text) => (text ? [el("div", { className: "note" }, text)] : []);
+
+function personalCard(e) {
+  const pill = e.action === "reply" ? [el("span", { className: "pill reply" }, "REPLY")] : [];
+  return el("div", { className: "card row" }, avatar(e.sender),
+    el("div", { className: "grow" },
+      el("div", {}, el("span", { className: "name" }, e.sender), el("span", { className: "topic" }, ` · ${e.topic}`), ...pill),
+      ...(e.summary ? [el("p", { className: "summary" }, e.summary)] : []),
+      ...note(e.note)));
+}
+
+function automatedCard(e) {
+  const many = e.items.length > 1;
+  const li = (i) => el("li", {}, i.summary,
+    ...(i.action === "act" ? [el("span", { className: "pill todo" }, "TO DO")] : []), ...note(i.note));
+  return el("div", { className: "card row" }, avatar(e.sender, true),
+    el("div", { className: "grow" },
+      el("div", {}, el("span", { className: "name" }, e.sender),
+        ...(many ? [el("span", { className: "pill" }, `${e.items.length} emails`)] : [])),
+      el("ul", { className: "mini" }, ...e.items.map(li))));
+}
+
+function section(title, entries) {
+  if (!entries.length) return [];
+  return [el("div", { className: "sec" }, title),
+          ...entries.map((e) => (e.type === "personal" ? personalCard(e) : automatedCard(e)))];
+}
+
+function reminderCard(r) {
+  const reply = r.kind === "reply_needed";
+  const text = reply
+    ? `You still need to reply to ${r.person} about ${r.topic} (received ${r.ago}).`
+    : `No reply yet from ${r.person} about ${r.topic} (you wrote ${r.ago}).`;
+  return el("div", { className: "card row" }, avatar(r.person),
+    el("div", { className: "grow" }, text, ...note(r.note)));
+}
+
+function renderDigest(entry, { withReminders }) {
+  if (!entry.digest) return [el("pre", {}, entry.text || "")];
+  const d = entry.digest;
+  const empty = !d.attention.length && !d.fyi.length && !(withReminders && d.reminders.length);
+  const out = [];
+  if (empty) out.push(el("div", { className: "card empty" }, d.headline));
+  out.push(...section("Needs your attention", d.attention), ...section("For your info", d.fyi));
+  if (withReminders) out.push(...(d.reminders.length ? [el("div", { className: "sec" }, "Still open"), ...d.reminders.map(reminderCard)] : []));
+  if (d.skipped.count) {
+    const names = d.skipped.senders.slice(0, 5).join(", ") + (d.skipped.senders.length > 5 ? "…" : "");
+    out.push(el("div", { className: "skipped" }, `Skipped ${d.skipped.count} automated email${d.skipped.count === 1 ? "" : "s"} (${names})`));
+  }
+  return out;
+}
+
+function renderItems(items) {
+  const box = $("items");
+  box.replaceChildren();
+  if (!items.length) {
+    box.append(el("div", { className: "card empty" }, "Nothing open. You're all caught up. 🎉"));
+    return;
+  }
+  for (const it of items) {
+    const reply = it.kind === "reply_needed";
+    const text = reply
+      ? `Reply to ${it.person} about ${it.topic}`
+      : `Waiting on ${it.person} about ${it.topic}`;
+    const done = el("button", { textContent: "Done" });
+    done.onclick = async () => {
+      done.disabled = true;
+      await fetch(`/api/items/${encodeURIComponent(it.id)}/done`, { method: "POST" });
+      load();
+    };
+    box.append(el("div", { className: "card row item" + (reply ? "" : " wait") },
+      avatar(it.person),
+      el("div", { className: "grow" },
+        el("div", {}, el("span", { className: "name" }, text),
+          el("span", { className: "pill " + (reply ? "reply" : "wait") }, reply ? "NEEDS REPLY" : "FOLLOW UP")),
+        el("div", { className: "sub" }, reply ? `Received ${ago(it.since)}` : `You wrote ${ago(it.since)}`),
+        ...note(it.note)),
+      done));
+  }
+}
+
+function renderHistory(history) {
+  const latest = $("latest"), rest = $("history");
+  latest.replaceChildren();
+  rest.replaceChildren();
+  $("hero").hidden = true;
+  if (!history.length) {
+    latest.append(el("div", { className: "card empty" }, "No digests yet. Press “Check now”."));
+    return;
+  }
+  const [first, ...others] = history;
+  if (first.digest) {
+    $("hero").hidden = false;
+    $("hero-label").textContent = `${MODES[first.mode][0]} ${MODES[first.mode][1]} · ${prettyWhen(first.when)}`;
+    $("hero-big").textContent = first.digest.headline;
+  }
+  latest.append(...renderDigest(first, { withReminders: false }));
+  if (!others.length) rest.append(el("div", { className: "empty" }, "Nothing earlier yet."));
+  for (const h of others) {
+    rest.append(el("details", {},
+      el("summary", {}, el("span", {}, `${MODES[h.mode][0]} ${prettyWhen(h.when)}`),
+        el("span", { className: "sub" }, h.digest ? h.digest.headline : "")),
+      el("div", { className: "body" }, ...renderDigest(h, { withReminders: true }))));
+  }
+}
+
+async function load() {
+  const data = await (await fetch("/api/overview")).json();
+  $("lastrun").textContent = data.last_run
+    ? `Last checked ${new Date(data.last_run * 1000).toLocaleString()}`
+    : "Not run yet";
+  renderItems(data.items);
+  renderHistory(data.history);
+}
+
+$("run").onclick = async () => {
+  const btn = $("run");
+  btn.disabled = true;
+  btn.textContent = "Checking…";
+  $("msg").textContent = "";
+  try {
+    const res = await fetch("/api/run", { method: "POST" });
+    const body = await res.json();
+    if (!res.ok) $("msg").textContent = body.detail || "Something went wrong";
+    else if (!body.recorded) $("msg").textContent = "Checked: no new emails since the last check.";
+  } catch (e) {
+    $("msg").textContent = "Could not reach the server.";
+  }
+  btn.disabled = false;
+  btn.textContent = "Check now";
+  load();
+};
+
+load();
+</script>
+</body>
+</html>

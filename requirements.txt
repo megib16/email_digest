@@ -1,0 +1,9 @@
+anthropic==0.120.2
+python-dotenv==1.2.1
+requests==2.32.5
+google-api-python-client
+google-auth-oauthlib
+pytest
+fastapi
+uvicorn
+httpx
